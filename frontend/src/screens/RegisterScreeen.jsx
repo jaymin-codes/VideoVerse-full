@@ -1,11 +1,32 @@
 import Logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useState } from "react";
 
 function RegisterScreeen() {
-  return (
-    <section className="px-4">
-      <div className="flex md:flex-row flex-col md:space-x-5 p-2 h-screen">
+  const [avatarPreview, setAvatarPreview] = useState(null);
+  const [coverPreview, setCoverPreview] = useState(null);
 
+  const handleImageChange = (e, setImagePreview) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImagePreview(null);
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+    >
+      <div className="flex md:flex-row flex-col md:space-x-5 p-2 h-screen">
         <div className="md:w-1/2 flex items-center justify-center">
           <img src={Logo} alt="logo" />
         </div>
@@ -40,7 +61,7 @@ function RegisterScreeen() {
           </div>
 
           <form action="#" method="POST">
-            <div className="md:flex md:flex-col md:items-center space-y-5">
+            <div className="md:flex md:flex-col md:items-center space-y-3">
               <div className="md:w-2/3">
                 <label htmlFor="name" className="text-base font-medium ">
                   Full Name*
@@ -83,35 +104,54 @@ function RegisterScreeen() {
                 </div>
               </div>
 
-              <div className="md:w-2/3 md:flex md:items-center md:justify-center md:space-x-2 space-y-5 md:space-y-0">
-                <div>
-                  <label
-                    htmlFor="avatarImage"
-                    className="text-base font-medium"
-                  >
-                    Avatar Image*
-                  </label>
-                  <div className="mt-2">
+              <div className="md:w-2/3">
+                <label htmlFor="avatarImage" className="text-base font-medium">
+                  Avatar Image*
+                </label>
+                <div className="flex items-center space-x-10 h-[50px]">
+                  <div className="mt-2 w-1/2">
                     <input
-                      className="signUp-signIn-input-field"
+                      className="w-[200px] h-[25px]"
                       type="file"
-                      placeholder="avatar image"
                       id="avatarImage"
-                    ></input>
+                      accept="image/*"
+                      onChange={(e) => handleImageChange(e, setAvatarPreview)}
+                    />
+                  </div>
+                  <div className="w-1/2 text-right">
+                    {avatarPreview && (
+                      <img
+                        className="w-[80px] rounded-md"
+                        src={avatarPreview}
+                        alt="Avatar Preview"
+                      />
+                    )}
                   </div>
                 </div>
+              </div>
 
-                <div>
-                  <label htmlFor="coverImage" className="text-base font-medium">
-                    Cover Image
-                  </label>
-                  <div className="mt-2">
+              <div className="md:w-2/3">
+                <label htmlFor="coverImage" className="text-base font-medium">
+                  Cover Image
+                </label>
+                <div className="flex items-center space-x-10 h-[50px]">
+                  <div className="mt-2 w-1/2">
                     <input
-                      className="signUp-signIn-input-field"
+                      className="w-[200px] h-[25px]"
                       type="file"
-                      placeholder="cover image"
                       id="coverImage"
-                    ></input>
+                      accept="image/*"
+                      onChange={(e) => handleImageChange(e, setCoverPreview)}
+                    />
+                  </div>
+                  <div className="w-1/2 text-right">
+                    {coverPreview && (
+                      <img
+                        className="w-[80px] rounded-md"
+                        src={coverPreview}
+                        alt="Cover Preview"
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -148,7 +188,7 @@ function RegisterScreeen() {
           </p>
         </div>
       </div>
-    </section>
+    </motion.div>
   );
 }
 
