@@ -9,26 +9,30 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
+//redux
+import { Provider } from "react-redux";
+import { store } from "./store.js";
 //screens
 import LoginScreen from "./screens/LoginScreen.jsx";
 import HomeScreen from "./screens/HomeScreen.jsx";
-import RegisterScreeen from "./screens/RegisterScreeen.jsx";
+import RegisterScreen from "./screens/RegisterScreen.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-
-      <Route path="/home" element={<HomeScreen />} />
+      <Route path="/" element={<HomeScreen />} />
       <Route path="/login" element={<LoginScreen />} />
-      <Route path="/register" element={<RegisterScreeen />} />
-
+      <Route path="/register" element={<RegisterScreen />} />
 
       {/* <Route path="*" element={<PageNotFound />} /> */}
     </Route>
   )
 );
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );

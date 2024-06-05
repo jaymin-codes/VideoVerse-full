@@ -11,8 +11,8 @@ app.use(
   })
 );
 
-app.use(express.json({ limit: "16kb" })); //setting limit to json size
-app.use(express.urlencoded({ extended: true, limit: "16kb" }));
+app.use(express.json({ limit: "3mb" })); //setting limit to json size
+app.use(express.urlencoded({ extended: true, limit: "3mb" }));
 app.use(express.static("public")); //this for temp files which users uploads
 app.use(cookieParser()); //parses cookies in req.cookies
 

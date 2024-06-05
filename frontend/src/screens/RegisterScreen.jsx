@@ -1,12 +1,30 @@
 import Logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { registerUser } from "../slices/actions/auth.action";
 
-function RegisterScreeen() {
+function RegisterScreen() {
+  //registration states
+  const [registerForm, setRegisterForm] = useState({
+    fullName: "",
+    email: "",
+    userName: "",
+    password: "",
+    avatar: "",
+    coverImage: "",
+  });
+
+  //redux
+  const { loading, error } = useSelector((state) => state.user);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  //for avatar and cover image preview
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [coverPreview, setCoverPreview] = useState(null);
-
   const handleImageChange = (e, setImagePreview) => {
     const file = e.target.files[0];
     if (file) {
@@ -15,9 +33,40 @@ function RegisterScreeen() {
         setImagePreview(reader.result);
       };
       reader.readAsDataURL(file);
+      setRegisterForm({
+        ...registerForm,
+        [e.target.name]: file,
+      });
     } else {
       setImagePreview(null);
+      setRegisterForm({
+        ...registerForm,
+        [e.target.name]: "",
+      });
     }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setRegisterForm({
+      ...registerForm,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const userData = new FormData();
+    for (const key in registerForm) {
+      userData.append(key, registerForm[key]);
+    }
+
+    dispatch(registerUser(userData)).then((result) => {
+      if (result.payload) {
+        console.log("result from register.jsx -----> ", result.payload);
+        navigate("/");
+      }
+    });
   };
 
   return (
@@ -60,10 +109,10 @@ function RegisterScreeen() {
             <p className="text-xl font-semibold text-gray-400">OR</p>
           </div>
 
-          <form action="#" method="POST">
+          <form onSubmit={handleSubmit}>
             <div className="md:flex md:flex-col md:items-center space-y-3">
               <div className="md:w-2/3">
-                <label htmlFor="name" className="text-base font-medium ">
+                <label htmlFor="fullName" className="text-base font-medium ">
                   Full Name*
                 </label>
                 <div className="mt-2">
@@ -71,8 +120,12 @@ function RegisterScreeen() {
                     className="signUp-signIn-input-field"
                     type="text"
                     placeholder="Full Name"
-                    id="name"
-                  ></input>
+                    id="fullName"
+                    name="fullName"
+                    value={registerForm.fullName}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
               </div>
 
@@ -86,12 +139,16 @@ function RegisterScreeen() {
                     type="email"
                     placeholder="Email"
                     id="email"
+                    name="email"
+                    value={registerForm.email}
+                    onChange={handleChange}
+                    required
                   ></input>
                 </div>
               </div>
 
               <div className="md:w-2/3">
-                <label htmlFor="username" className="text-base font-medium ">
+                <label htmlFor="userName" className="text-base font-medium ">
                   Username*
                 </label>
                 <div className="mt-2">
@@ -99,7 +156,11 @@ function RegisterScreeen() {
                     className="signUp-signIn-input-field"
                     type="text"
                     placeholder="Username"
-                    id="username"
+                    id="userName"
+                    name="userName"
+                    value={registerForm.userName}
+                    onChange={handleChange}
+                    required
                   ></input>
                 </div>
               </div>
@@ -114,14 +175,16 @@ function RegisterScreeen() {
                       className="w-[200px] h-[25px]"
                       type="file"
                       id="avatarImage"
+                      name="avatar"
                       accept="image/*"
                       onChange={(e) => handleImageChange(e, setAvatarPreview)}
+                      required
                     />
                   </div>
                   <div className="w-1/2 text-right">
                     {avatarPreview && (
                       <img
-                        className="w-[80px] rounded-md"
+                        className="w-[50px] h-[35px] rounded-md"
                         src={avatarPreview}
                         alt="Avatar Preview"
                       />
@@ -140,6 +203,7 @@ function RegisterScreeen() {
                       className="w-[200px] h-[25px]"
                       type="file"
                       id="coverImage"
+                      name="coverImage"
                       accept="image/*"
                       onChange={(e) => handleImageChange(e, setCoverPreview)}
                     />
@@ -147,7 +211,7 @@ function RegisterScreeen() {
                   <div className="w-1/2 text-right">
                     {coverPreview && (
                       <img
-                        className="w-[80px] rounded-md"
+                        className="w-[70px] h-[35px] rounded-md"
                         src={coverPreview}
                         alt="Cover Preview"
                       />
@@ -168,16 +232,21 @@ function RegisterScreeen() {
                     type="password"
                     placeholder="Password"
                     id="password"
+                    name="password"
+                    value={registerForm.password}
+                    onChange={handleChange}
+                    required
                   ></input>
                 </div>
               </div>
 
               <div className="md:w-2/3">
-                <button type="button" className="signUp-signIn-button">
-                  Create Account
+                <button type="submit" className="signUp-signIn-button">
+                  {loading ? "Loading..." : "Create Account"}
                 </button>
               </div>
             </div>
+            {error && <div>{error}</div>}
           </form>
 
           <p className="mt-2 text-center text-base mb-8">
@@ -192,4 +261,4 @@ function RegisterScreeen() {
   );
 }
 
-export default RegisterScreeen;
+export default RegisterScreen;

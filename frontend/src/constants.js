@@ -1,1 +1,1 @@
-export const USER_URL = "/api/user"
+export const USER_URL = "/api/v1/users/"

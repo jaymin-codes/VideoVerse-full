@@ -4,12 +4,13 @@ body {
     font-family: monospace;
 }
 
-/* tailwind classes */
+
+/** tailwind classes */
+
 
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
 }
-
 /* For IE, Edge and Firefox */
 .scrollbar-hide {
     -ms-overflow-style: none;  /* IE and Edge */
@@ -17,11 +18,43 @@ body {
 }
 
 
-/* login signup */
+/*? login signup */
 .signUp-signIn-input-field {
-    @apply flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50
+    @apply flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1
 }
 
 .signUp-signIn-button {
     @apply inline-flex w-full items-center justify-center rounded-md bg-[#0a0a0a] px-3.5 py-2.5 font-semibold text-xl text-white hover:shadow-sm hover:shadow-[#adadad]
 }
+
+/*? image preview in register form */
+#img-preview {
+    display: none; 
+    width: 155px;   
+    border: 2px dashed #333;  
+    margin-bottom: 20px;
+  }
+  #img-preview img {  
+    width: 100%;
+    height: auto; 
+    display: block;   
+  }
+  [type="file"] {
+    height: 0;  
+    width: 0;
+    overflow: hidden;
+  }
+  [type="file"] + label {
+    font-family: sans-serif;
+    background: #f44336;
+    padding: 10px 30px;
+    border: 2px solid #f44336;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  [type="file"] + label:hover {
+    background-color: #fff;
+    color: #f44336;
+  }
