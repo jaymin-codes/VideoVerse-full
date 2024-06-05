@@ -36,7 +36,6 @@ export const registerUser = createAsyncThunk(
         },
       });
       const data = res.data.data;
-      console.log(data);
       localStorage.setItem("user", JSON.stringify(data));
       return data;
     } catch (error) {

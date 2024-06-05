@@ -60,7 +60,7 @@ function LoginScreen() {
                 <div className="mt-2">
                   <input
                     className="signUp-signIn-input-field"
-                    type="email"
+                    type="text"
                     placeholder="Email"
                     onChange={(e) => setLogin(e.target.value)}
                     value={login}
