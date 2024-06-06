@@ -28,18 +28,19 @@ export const logoutUser = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
   "user/registerUser",
-  async (userData) => {
+  async (userData, { rejectWithValue }) => {
     try {
       const res = await axios.post(`${USER_URL}/register`, userData, {
         headers: {
-          "Content-Type": "multipart/form-data", // Tell the server we're sending files
+          "Content-Type": "multipart/form-data", 
         },
       });
       const data = res.data.data;
       localStorage.setItem("user", JSON.stringify(data));
       return data;
     } catch (error) {
-      console.log(error);
+      console.error("Error registering user:", error.message);
+      return rejectWithValue(error.res?.data?.message || error.message);
     }
   }
 );

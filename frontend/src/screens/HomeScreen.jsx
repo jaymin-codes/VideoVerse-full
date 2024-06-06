@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from '../slices/actions/auth.action';
+import { Link } from 'react-router-dom';
 
 
 
@@ -20,7 +21,7 @@ function HomeScreen() {
 
   return (
     <div>
-      <button onClick={handleSubmit}>logout</button>
+      <button onClick={handleSubmit}><Link to="/login">Logout</Link></button>
     </div>
   )
 }

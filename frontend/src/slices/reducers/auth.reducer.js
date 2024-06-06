@@ -46,7 +46,7 @@ const userReducer = createSlice({
       .addCase(logoutUser.rejected, (state,action) => {
         state.loading = false,
         state.user = null,
-        state.error = action.payload
+        state.error = action.error?.message
       })
 
       // REGISTER USER
@@ -58,14 +58,12 @@ const userReducer = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
-        console.log("in reducer -----> ", action);
         state.error = null;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.user = null;
-        state.error = action.payload;
-        console.log("reducer error -----> ", action);
+        state.error = action.error;
       })
   },
 });

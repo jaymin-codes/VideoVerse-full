@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import { motion } from "framer-motion";
+import { Toaster, toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../slices/actions/auth.action.js";
 
@@ -11,8 +12,6 @@ function LoginScreen() {
 
   //redux state
   const { loading, error } = useSelector((state) => state.user);
-
-
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,15 +23,14 @@ function LoginScreen() {
       email: login,
       password,
     };
-    dispatch(loginUser(userCredentials))
-      .then((result) => {
-        if (result.payload) {
-          console.log(result.payload);
-          setLogin("");
-          setPassword("");
-          navigate("/");
-        }
-      })
+    dispatch(loginUser(userCredentials)).then((result) => {
+      if (result.payload) {
+        console.log(result.payload);
+        setLogin("");
+        setPassword("");
+        navigate("/");
+      } 
+    });
   };
 
   return (
@@ -41,6 +39,7 @@ function LoginScreen() {
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
     >
+      <Toaster />
       <div className="flex items-center justify-center my-14">
         <div className="md:w-1/3">
           <div className="mb-2 flex justify-center">
@@ -92,17 +91,19 @@ function LoginScreen() {
               </div>
 
               <div>
-                <button
-                  type="submit"
-                  className="signUp-signIn-button"
-                >
+                <button type="submit" className="signUp-signIn-button">
                   {loading ? "Loading..." : "Get Started"}
                 </button>
               </div>
             </div>
 
-            {error && <div>{error}</div>}
-
+            {error && (
+              <div className="mt-4 text-center text-red-500">
+                {error === "Request failed with status code 400"
+                  ? ("Username/Email and password are required")
+                  : error}
+              </div>
+            )}
           </form>
 
           <p className="mt-2 text-center text-base">

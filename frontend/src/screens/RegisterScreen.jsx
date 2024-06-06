@@ -1,9 +1,11 @@
 import Logo from "../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { toast, Toaster } from "react-hot-toast";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { registerUser } from "../slices/actions/auth.action";
+import RegisterSuccessPopUp from "../components/RegisterSuccessPopUp";
 
 function RegisterScreen() {
   //registration states
@@ -25,6 +27,9 @@ function RegisterScreen() {
   //for avatar and cover image preview
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [coverPreview, setCoverPreview] = useState(null);
+
+  const [isModalVisible, setModalVisible] = useState(false);
+
   const handleImageChange = (e, setImagePreview) => {
     const file = e.target.files[0];
     if (file) {
@@ -54,19 +59,22 @@ function RegisterScreen() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const userData = new FormData();
     for (const key in registerForm) {
       userData.append(key, registerForm[key]);
     }
 
-    dispatch(registerUser(userData)).then((result) => {
-      if (result.payload) {
-        console.log("result from register.jsx -----> ", result.payload);
-        navigate("/");
-      }
-    });
+    const resultAction = await dispatch(registerUser(userData));
+
+    if (registerUser.fulfilled.match(resultAction)) {
+      toast.success("Registration Successfull", { duration: 3000 });
+      setModalVisible(true);
+    } else if (registerUser.rejected.match(resultAction)) {
+      toast.error("Username or email already exists");
+      console.error("Error registering user: ", resultAction.error.message);
+    }
   };
 
   return (
@@ -76,6 +84,9 @@ function RegisterScreen() {
       transition={{ duration: 0.8 }}
     >
       <div className="flex md:flex-row flex-col md:space-x-5 p-2 h-screen">
+        <div>
+          <Toaster />
+        </div>
         <div className="md:w-1/2 flex items-center justify-center">
           <img src={Logo} alt="logo" />
         </div>
@@ -246,7 +257,11 @@ function RegisterScreen() {
                 </button>
               </div>
             </div>
-            {error && <div>{error}</div>}
+            {error && (
+              <div className="mt-4 text-center text-red-500">
+                {"An error occurred. Please try again."}
+              </div>
+            )}
           </form>
 
           <p className="mt-2 text-center text-base mb-8">
@@ -257,6 +272,10 @@ function RegisterScreen() {
           </p>
         </div>
       </div>
+      <RegisterSuccessPopUp
+        isVisible={isModalVisible}
+        onClose={() => setModalVisible(false)}
+      />
     </motion.div>
   );
 }
