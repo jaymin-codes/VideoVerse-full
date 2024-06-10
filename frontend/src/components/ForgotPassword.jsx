@@ -50,7 +50,7 @@ const ForgotPassword = ({ isVisible, onClose }) => {
           <h2 className="text-xl text-center font-bold mb-2">
             Forgot Password
           </h2>
-          <p className="mb-3 text-[16px] text-center">
+          <p className="mb-3 text-[16px] font-medium text-center">
             Please enter your email address
           </p>
 
@@ -59,6 +59,7 @@ const ForgotPassword = ({ isVisible, onClose }) => {
               type="email"
               className="w-full text-[16px] py-1 px-2 rounded-md border-2 border-gray-700"
               value={email}
+              placeholder="Registered email"
               onChange={(e) => setEmail(e.target.value)}
               required
             />

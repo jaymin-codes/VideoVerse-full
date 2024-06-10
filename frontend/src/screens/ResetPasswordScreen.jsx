@@ -5,7 +5,6 @@ import { USER_URL } from "../constants";
 import toast, { Toaster } from "react-hot-toast";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
-
 function ResetPasswordScreen() {
   const [newPass, setNewPass] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
@@ -29,15 +28,19 @@ function ResetPasswordScreen() {
       );
 
       if (response.status === 200) {
-        toast.success("Password updated successfully", { duration: 2000 });
+        toast.success("Password updated successfully");
+
         toast.success("Please wait, You will be navigated to login screen", {
           icon: "⏳",
+          style: { fontSize: "16px" },
+          position: "top-left",
+          duration: 5000,
         });
       }
 
       setTimeout(() => {
-        navigate("/login");
-      }, 2000);
+        navigate("/login", { replace: true });
+      }, 5000);
     } catch (error) {
       toast.error("Error while setting new password");
       console.error("Error:", error);
@@ -99,7 +102,7 @@ function ResetPasswordScreen() {
                 className="absolute inset-y-0 right-0 pr-3 mt-[30px] flex items-center cursor-pointer"
                 onClick={toggleShowPass}
               >
-                {showPass ?  <FaRegEyeSlash />:<FaRegEye /> }
+                {showPass ? <FaRegEyeSlash /> : <FaRegEye />}
               </div>
             </div>
           </div>
@@ -111,11 +114,11 @@ function ResetPasswordScreen() {
         </form>
       </div>
       <p className="mt-2 text-center text-base">
-            Go back to{" "}
-            <Link to="/login" className="font-medium underline">
-              Login
-            </Link>
-          </p>
+        Go back to{" "}
+        <Link to="/login" className="font-medium underline">
+          Login
+        </Link>
+      </p>
     </div>
   );
 }

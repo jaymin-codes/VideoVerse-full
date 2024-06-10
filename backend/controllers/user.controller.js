@@ -278,7 +278,7 @@ const forgotPasswordLink = asyncHandler(async (req, res) => {
   });
 
   const link = `http://localhost:5173/reset-password/${user._id}/${token}`;
-  console.log("Forgot password link -----> ", link);
+  // console.log("Forgot password link -----> ", link);
 
   sendMail(email, "VideoVerse: Reset Password Link", link);
 
@@ -296,9 +296,8 @@ const forgotPasswordLink = asyncHandler(async (req, res) => {
 //@desc    Reset password from link
 //@route   GET /api/users/reset-password
 const resetPassword = asyncHandler(async (req, res) => {
-  console.log("here");
   const { id, token } = await req.params;
-  console.log(req.params);
+  // console.log(req.params);
   
   const { password } = req.body;
   if (!password) {
