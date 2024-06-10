@@ -4,10 +4,12 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
 import {
   uploadOnCloudinary,
-  deleteImageFromCloudinary
+  deleteImageFromCloudinary,
 } from "../utils/cloudinary.js";
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
+import mongoose, { isValidObjectId } from "mongoose";
+import sendMail from "../utils/sendMail.js";
+import bcrypt from "bcrypt";
 
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
@@ -256,6 +258,82 @@ const changeCurrentUserPassword = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, {}, "Password changed successfully"));
+});
+
+//@desc    forgot password link generation
+//@route   POST /api/users/forgot-password
+const forgotPasswordLink = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    // throw new ApiError(404, "Email not registered");
+    return res.json("Email not registered");
+  }
+
+  const secretKey = process.env.ACCESS_TOKEN_SECRET + user._id;
+
+  const token = jwt.sign({ email: user.email, id: user._id }, secretKey, {
+    expiresIn: "5m",
+  });
+
+  const link = `http://localhost:5173/reset-password/${user._id}/${token}`;
+  console.log("Forgot password link -----> ", link);
+
+  sendMail(email, "VideoVerse: Reset Password Link", link);
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { link },
+        "Reset Password link generated successfully"
+      )
+    );
+});
+
+//@desc    Reset password from link
+//@route   GET /api/users/reset-password
+const resetPassword = asyncHandler(async (req, res) => {
+  console.log("here");
+  const { id, token } = await req.params;
+  console.log(req.params);
+  
+  const { password } = req.body;
+  if (!password) {
+    return res.status(400).json({ message: "New password is required" });
+  }
+
+  if (!isValidObjectId(id)) {
+    return res.status(400).json({ message: "Invalid user ID" });
+  }
+
+  const user = await User.findById(id);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const secretKey = process.env.ACCESS_TOKEN_SECRET + user._id;
+
+  try {
+    jwt.verify(token, secretKey);
+    const updatePassword = await User.findByIdAndUpdate(
+      id,
+      {
+        $set: { password: await bcrypt.hash(password, 10) },
+      },
+      {
+        new: true,
+      }
+    );
+
+    return res
+      .status(200)
+      .json({ message: "Password updated successfully", updatePassword });
+  } catch (error) {
+    return res.status(400).json({ message: "Not verified" });
+  }
 });
 
 //@desc    Get current user
@@ -511,4 +589,6 @@ export {
   updateUserCoverImage,
   getUserChannelProfile,
   getWatchHistory,
+  forgotPasswordLink,
+  resetPassword,
 };

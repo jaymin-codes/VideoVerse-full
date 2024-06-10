@@ -6,6 +6,7 @@ export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (userCredentials) => {
     const res = await axios.post(`${USER_URL}/login`, userCredentials);
+    console.log(`${USER_URL}/login`);
     const data = res.data.data;
     // console.log(data); //gets full user data
     localStorage.setItem("user", JSON.stringify(data)); //saving res to redux state

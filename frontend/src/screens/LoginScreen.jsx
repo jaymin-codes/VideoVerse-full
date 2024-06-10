@@ -2,13 +2,17 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import { motion } from "framer-motion";
-import { Toaster, toast } from "react-hot-toast";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../slices/actions/auth.action.js";
+import ForgotPassword from "../components/ForgotPassword.jsx";
 
 function LoginScreen() {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
+  const [showPass, setShowPass] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
 
   //redux state
   const { loading, error } = useSelector((state) => state.user);
@@ -29,8 +33,16 @@ function LoginScreen() {
         setLogin("");
         setPassword("");
         navigate("/");
-      } 
+      }
+
+      if (error) {
+        toast.error("Inavlid user credentials")
+      }
     });
+  };
+
+  const toggleShowPass = () => {
+    setShowPass(!showPass);
   };
 
   return (
@@ -69,24 +81,28 @@ function LoginScreen() {
 
               <div>
                 <div className="flex items-center justify-between">
-                  <label htmlFor="" className="text-base font-medium ">
+                  <label htmlFor="password" className="text-base font-medium">
                     Password
                   </label>
                 </div>
-                <div className="mt-2">
+                <div className="mt-2 relative">
                   <input
-                    className="signUp-signIn-input-field"
-                    type="password"
+                    className="signUp-signIn-input-field w-full pr-10"
+                    type={showPass ? "text" : "password"}
                     placeholder="Password"
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
-                  ></input>
+                    id="password"
+                  />
+                  <div
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                    onClick={toggleShowPass}
+                  >
+                    {showPass ? <FaRegEye /> : <FaRegEyeSlash />}
+                  </div>
                 </div>
-
                 <div className="text-right pt-1">
-                  <a href="#" title="" className="text-sm font-semibold">
-                    Forgot password?
-                  </a>
+                  <button onClick={() => setModalVisible(true)} type="button">Forgot password?</button>
                 </div>
               </div>
 
@@ -100,7 +116,7 @@ function LoginScreen() {
             {error && (
               <div className="mt-4 text-center text-red-500">
                 {error === "Request failed with status code 400"
-                  ? ("Username/Email and password are required")
+                  ? "Username/Email and password are required"
                   : error}
               </div>
             )}
@@ -114,6 +130,10 @@ function LoginScreen() {
           </p>
         </div>
       </div>
+      <ForgotPassword
+        isVisible={isModalVisible}
+        onClose={() => setModalVisible(false)}
+      />
     </motion.div>
   );
 }

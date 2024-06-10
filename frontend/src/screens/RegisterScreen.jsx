@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { registerUser } from "../slices/actions/auth.action";
 import RegisterSuccessPopUp from "../components/RegisterSuccessPopUp";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
 function RegisterScreen() {
   //registration states
@@ -27,6 +28,7 @@ function RegisterScreen() {
   //for avatar and cover image preview
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [coverPreview, setCoverPreview] = useState(null);
+  const [showPass, setShowPass] = useState(false);
 
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -75,6 +77,10 @@ function RegisterScreen() {
       toast.error("Username or email already exists");
       console.error("Error registering user: ", resultAction.error.message);
     }
+  };
+
+  const toggleShowPass = () => {
+    setShowPass(!showPass);
   };
 
   return (
@@ -231,7 +237,7 @@ function RegisterScreen() {
                 </div>
               </div>
 
-              <div className="md:w-2/3">
+              <div className="relative md:w-2/3">
                 <div className="flex items-center justify-between">
                   <label htmlFor="password" className="text-base font-medium">
                     Password*
@@ -240,7 +246,7 @@ function RegisterScreen() {
                 <div className="mt-2">
                   <input
                     className="signUp-signIn-input-field"
-                    type="password"
+                    type={showPass ? "text" : "password"}
                     placeholder="Password"
                     id="password"
                     name="password"
@@ -248,6 +254,12 @@ function RegisterScreen() {
                     onChange={handleChange}
                     required
                   ></input>
+                   <div
+                    className="absolute inset-y-0 right-0 pr-3 mt-[30px] flex items-center cursor-pointer"
+                    onClick={toggleShowPass}
+                  >
+                    {showPass ? <FaRegEye /> : <FaRegEyeSlash />}
+                  </div>
                 </div>
               </div>
 
