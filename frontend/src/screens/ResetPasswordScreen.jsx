@@ -4,11 +4,13 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { USER_URL } from "../constants";
 import toast, { Toaster } from "react-hot-toast";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import Loader from "../components/Loader.jsx";
 
 function ResetPasswordScreen() {
   const [newPass, setNewPass] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
   const [showPass, setShowPass] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { id, token } = useParams();
   const navigate = useNavigate();
@@ -20,6 +22,8 @@ function ResetPasswordScreen() {
       toast.error("Passwords do not match");
       return;
     }
+
+    setLoading(true);
 
     try {
       const response = await axios.patch(
@@ -44,6 +48,8 @@ function ResetPasswordScreen() {
     } catch (error) {
       toast.error("Error while setting new password");
       console.error("Error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -54,65 +60,69 @@ function ResetPasswordScreen() {
   return (
     <div className="h-screen flex flex-col items-center justify-center">
       <Toaster />
-      <div className="md:w-1/3 w-[80%] space-y-5">
-        <h2 className="md:text-3xl text-2xl font-semibold text-center p-2">
-          Reset Password
-        </h2>
-        <form onSubmit={handleSubmit}>
-          <div className="relative mb-3">
-            <label htmlFor="newPassword" className="text-base font-medium">
-              New Password
-            </label>
-            <div className="mt-2">
-              <input
-                className="signUp-signIn-input-field"
-                type={showPass ? "text" : "password"}
-                id="newPassword"
-                placeholder="New password"
-                onChange={(e) => setNewPass(e.target.value)}
-                value={newPass}
-              />
-              <div
-                className="absolute inset-y-0 right-0 pr-3 mt-[30px] flex items-center cursor-pointer"
-                onClick={toggleShowPass}
-              >
-                {showPass ? <FaRegEyeSlash /> : <FaRegEye />}
-              </div>
-            </div>
-          </div>
-          <div className="relative mb-3">
-            <div className="flex items-center justify-between">
-              <label
-                htmlFor="confirmPassword"
-                className="text-base font-medium"
-              >
-                Confirm Password
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="md:w-1/3 w-[80%] space-y-5">
+          <h2 className="md:text-3xl text-2xl font-semibold text-center p-2">
+            Reset Password
+          </h2>
+          <form onSubmit={handleSubmit}>
+            <div className="relative mb-3">
+              <label htmlFor="newPassword" className="text-base font-medium">
+                New Password
               </label>
-            </div>
-            <div className="mt-2">
-              <input
-                className="signUp-signIn-input-field"
-                type={showPass ? "text" : "password"}
-                placeholder="Confirm Password"
-                id="confirmPassword"
-                onChange={(e) => setConfirmPass(e.target.value)}
-                value={confirmPass}
-              />
-              <div
-                className="absolute inset-y-0 right-0 pr-3 mt-[30px] flex items-center cursor-pointer"
-                onClick={toggleShowPass}
-              >
-                {showPass ? <FaRegEyeSlash /> : <FaRegEye />}
+              <div className="mt-2">
+                <input
+                  className="signUp-signIn-input-field"
+                  type={showPass ? "text" : "password"}
+                  id="newPassword"
+                  placeholder="New password"
+                  onChange={(e) => setNewPass(e.target.value)}
+                  value={newPass}
+                />
+                <div
+                  className="absolute inset-y-0 right-0 pr-3 mt-[30px] flex items-center cursor-pointer"
+                  onClick={toggleShowPass}
+                >
+                  {showPass ? <FaRegEye /> : <FaRegEyeSlash />}
+                </div>
               </div>
             </div>
-          </div>
-          <div>
-            <button type="submit" className="signUp-signIn-button mt-3">
-              Submit
-            </button>
-          </div>
-        </form>
-      </div>
+            <div className="relative mb-3">
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="confirmPassword"
+                  className="text-base font-medium"
+                >
+                  Confirm Password
+                </label>
+              </div>
+              <div className="mt-2">
+                <input
+                  className="signUp-signIn-input-field"
+                  type={showPass ? "text" : "password"}
+                  placeholder="Confirm Password"
+                  id="confirmPassword"
+                  onChange={(e) => setConfirmPass(e.target.value)}
+                  value={confirmPass}
+                />
+                <div
+                  className="absolute inset-y-0 right-0 pr-3 mt-[30px] flex items-center cursor-pointer"
+                  onClick={toggleShowPass}
+                >
+                  {showPass ? <FaRegEye /> : <FaRegEyeSlash />}
+                </div>
+              </div>
+            </div>
+            <div>
+              <button type="submit" className="signUp-signIn-button mt-3">
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
       <p className="mt-2 text-center text-base">
         Go back to{" "}
         <Link to="/login" className="font-medium underline">

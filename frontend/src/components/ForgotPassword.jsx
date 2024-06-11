@@ -4,6 +4,7 @@ import { ImCross } from "react-icons/im";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
 import { USER_URL } from "../constants";
+import Loader from "./Loader.jsx";
 
 const ForgotPassword = ({ isVisible, onClose }) => {
 
