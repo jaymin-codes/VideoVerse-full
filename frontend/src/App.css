@@ -7,6 +7,10 @@ body {
 
 /** tailwind classes */
 
+.navbar-btn {
+  @apply block rounded-md bg-teal-600 px-4 py-2 text-base font-medium text-white transition hover:bg-teal-700 dark:hover:bg-teal-500
+}
+
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
@@ -23,7 +27,7 @@ body {
 
 /*? login signup */
 .signUp-signIn-input-field {
-  @apply flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1
+  @apply flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-base placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1
 }
 
 .signUp-signIn-button {

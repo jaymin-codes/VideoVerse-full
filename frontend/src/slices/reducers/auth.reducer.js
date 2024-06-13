@@ -2,13 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 import { loginUser, logoutUser, registerUser } from "../actions/auth.action";
 
 const userReducer = createSlice({
-  name: "user",
-  initialState: {
+  name: "user", //name of the slice
+
+  initialState: { //states of the slice
     loading: false,
-    user: null, // Takes the payload
+    user: null,
     error: null,
   },
-  extraReducers: (builder) => {
+
+  extraReducers: (builder) => { //extraReducers to handle states of slice based on action
     builder
       //LOGIN USER
       .addCase(loginUser.pending, (state) => {
@@ -24,11 +26,8 @@ const userReducer = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.user = null;
-        if (action.error.message === "Request failed with status code 401") {
-          state.error = "invalid user credentials!";
-        } else {
-          state.error = action.error.message;
-        }
+        state.error = action.payload
+        // console.log("in reducer ------> ",action.payload);
       })
 
       // LOGOUT USER
@@ -68,5 +67,5 @@ const userReducer = createSlice({
   },
 });
 
-export default userReducer.reducer; // Ensure default export
+export default userReducer.reducer; 
 

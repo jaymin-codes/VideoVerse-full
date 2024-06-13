@@ -8,6 +8,7 @@ import { registerUser } from "../slices/actions/auth.action";
 import RegisterSuccessPopUp from "../components/RegisterSuccessPopUp";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import Loader from "../components/Loader.jsx";
+import NavbarOt from "../components/NavbarOt.jsx";
 
 function RegisterScreen() {
   //registration states
@@ -90,6 +91,7 @@ function RegisterScreen() {
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
     >
+      <NavbarOt />
       <Toaster />
       {loading ? (
         <Loader />

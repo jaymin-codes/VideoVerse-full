@@ -23,8 +23,6 @@ function ResetPasswordScreen() {
       return;
     }
 
-    setLoading(true);
-
     try {
       const response = await axios.patch(
         `${USER_URL}/reset-password/${id}/${token}`,
@@ -38,18 +36,16 @@ function ResetPasswordScreen() {
           icon: "⏳",
           style: { fontSize: "16px" },
           position: "top-left",
-          duration: 5000,
+          duration: 3000,
         });
       }
-
+      setLoading(true);
       setTimeout(() => {
         navigate("/login", { replace: true });
-      }, 5000);
+      }, 3000);
     } catch (error) {
       toast.error("Error while setting new password");
       console.error("Error:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -121,14 +117,14 @@ function ResetPasswordScreen() {
               </button>
             </div>
           </form>
+          <p className="mt-2 text-center text-base">
+            Go back to{" "}
+            <Link to="/login" className="font-medium underline">
+              Login
+            </Link>
+          </p>
         </div>
       )}
-      <p className="mt-2 text-center text-base">
-        Go back to{" "}
-        <Link to="/login" className="font-medium underline">
-          Login
-        </Link>
-      </p>
     </div>
   );
 }

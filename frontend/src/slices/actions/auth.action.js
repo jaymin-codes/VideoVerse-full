@@ -1,16 +1,25 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, isRejectedWithValue } from "@reduxjs/toolkit";
 import axios from "axios";
 import { USER_URL } from "../../constants";
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
-  async (userCredentials) => {
-    const res = await axios.post(`${USER_URL}/login`, userCredentials);
-    console.log(`${USER_URL}/login`);
-    const data = res.data.data;
-    // console.log(data); //gets full user data
-    localStorage.setItem("user", JSON.stringify(data)); //saving res to redux state
-    return data;
+  async (userCredentials, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${USER_URL}/login`, userCredentials);
+      const userData = response.data.data;
+      console.log(response.data.message);
+      localStorage.setItem("user", JSON.stringify(userData));
+      return userData; //payload of fulfillled action
+    } catch (error) {
+      const errorMessage = {
+        message: error.message,
+        statusText: error.response.statusText,
+        data: error.response.data
+      }; // payload of rejected action
+      console.log(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
   }
 );
 
@@ -21,8 +30,7 @@ export const logoutUser = createAsyncThunk(
       const res = await axios.post(`${USER_URL}/logout`);
       return res.data;
     } catch (error) {
-      console.log(error.name, error.message);
-      return rejectWithValue(error.res?.data?.message || error.message);
+      return thunkAPI;
     }
   }
 );
@@ -33,7 +41,7 @@ export const registerUser = createAsyncThunk(
     try {
       const res = await axios.post(`${USER_URL}/register`, userData, {
         headers: {
-          "Content-Type": "multipart/form-data", 
+          "Content-Type": "multipart/form-data",
         },
       });
       const data = res.data.data;

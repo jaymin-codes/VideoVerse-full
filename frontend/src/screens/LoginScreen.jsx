@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../slices/actions/auth.action.js";
 import ForgotPassword from "../components/ForgotPassword.jsx";
 import Loader from "../components/Loader.jsx";
+import NavbarOt from "../components/NavbarOt.jsx";
 
 function LoginScreen() {
   const [login, setLogin] = useState("");
@@ -21,25 +22,32 @@ function LoginScreen() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    let userCredentials = {
-      userName: login,
-      email: login,
-      password,
-    };
-    dispatch(loginUser(userCredentials)).then((result) => {
-      if (result.payload) {
-        console.log(result.payload);
+    try {
+      let userCredentials = {
+        userName: login,
+        email: login,
+        password,
+      };
+
+      const resultAction = await dispatch(loginUser(userCredentials));
+      const { payload, error } = resultAction;
+      console.log(resultAction);
+
+      if (payload.user) {
         setLogin("");
         setPassword("");
-        navigate("/");
+        navigate("/profile");
       }
 
       if (error) {
-        toast.error("Inavlid user credentials");
+        toast.error("Invalid user credentials");
       }
-    });
+    } catch (err) {
+      console.error("Login error:", err);
+      toast.error("Something went wrong with login");
+    }
   };
 
   const toggleShowPass = () => {
@@ -52,6 +60,7 @@ function LoginScreen() {
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
     >
+      <NavbarOt />
       <Toaster />
       {loading ? (
         <Loader />
@@ -79,6 +88,7 @@ function LoginScreen() {
                       placeholder="Email"
                       onChange={(e) => setLogin(e.target.value)}
                       value={login}
+                      required
                     ></input>
                   </div>
                 </div>
@@ -97,6 +107,7 @@ function LoginScreen() {
                       onChange={(e) => setPassword(e.target.value)}
                       value={password}
                       id="password"
+                      required
                     />
                     <div
                       className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
@@ -119,13 +130,13 @@ function LoginScreen() {
                 </div>
               </div>
 
-              {error && (
+              {/* {error && (
                 <div className="mt-4 text-center text-red-500">
                   {error === "Request failed with status code 400"
                     ? "Username/Email and password are required"
-                    : error}
+                    : error }
                 </div>
-              )}
+              )} */}
             </form>
 
             <p className="mt-2 text-center text-base">
