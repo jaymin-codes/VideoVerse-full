@@ -15,9 +15,9 @@ export const loginUser = createAsyncThunk(
       const errorMessage = {
         message: error.message,
         statusText: error.response.statusText,
-        data: error.response.data
+        data: error.response.data,
       }; // payload of rejected action
-      console.log(errorMessage);
+      console.log("Login Error", errorMessage);
       return rejectWithValue(errorMessage);
     }
   }
@@ -27,10 +27,17 @@ export const logoutUser = createAsyncThunk(
   "user/logoutUser",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.post(`${USER_URL}/logout`);
-      return res.data;
+      const response = await axios.post(`${USER_URL}/logout`);
+      console.log(response.data.message);
+      return response.data;
     } catch (error) {
-      return thunkAPI;
+      const errorMessage = {
+        message: error.message,
+        statusText: error.response.statusText,
+        data: error.response.data,
+      };
+      console.log("Logout Error", errorMessage);
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -39,17 +46,23 @@ export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (userData, { rejectWithValue }) => {
     try {
-      const res = await axios.post(`${USER_URL}/register`, userData, {
+      const response = await axios.post(`${USER_URL}/register`, userData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      const data = res.data.data;
-      localStorage.setItem("user", JSON.stringify(data));
-      return data;
+      const userData = response.data.data;
+      console.log(response.data.message);
+      localStorage.setItem("user", JSON.stringify(userData));
+      return userData;
     } catch (error) {
-      console.error("Error registering user:", error.message);
-      return rejectWithValue(error.res?.data?.message || error.message);
+      const errorMessage = {
+        message: error.message,
+        // statusText: error.response.statusText,
+        data: error.response.data,
+      };
+      console.log("Registration Error", errorMessage);
+      return rejectWithValue(errorMessage);
     }
   }
 );

@@ -18,6 +18,8 @@ import HomeScreen from "./screens/HomeScreen.jsx";
 import RegisterScreen from "./screens/RegisterScreen.jsx";
 import ProfileScreen from "./screens/ProfileScreen.jsx";
 import ResetPasswordScreen from "./screens/ResetPasswordScreen.jsx";
+import PrivateRoute from "./components/PrivateRoute.jsx";
+import PageNotFound from "./screens/PageNotFound.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,10 +27,17 @@ const router = createBrowserRouter(
       <Route path="/" element={<HomeScreen />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
-      <Route path="/profile" element={<ProfileScreen />} />
-      <Route path="/reset-password/:id/:token" element={<ResetPasswordScreen />} />
+      <Route
+        path="/reset-password/:id/:token"
+        element={<ResetPasswordScreen />}
+      />
 
-      {/* <Route path="*" element={<PageNotFound />} /> */}
+      {/*private routes  */}
+      <Route path="" element={<PrivateRoute />}>
+        <Route path="/profile" element={<ProfileScreen />} />
+      </Route>
+
+      <Route path="*" element={<PageNotFound />} />
     </Route>
   )
 );

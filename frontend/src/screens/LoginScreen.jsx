@@ -33,7 +33,6 @@ function LoginScreen() {
 
       const resultAction = await dispatch(loginUser(userCredentials));
       const { payload, error } = resultAction;
-      console.log(resultAction);
 
       if (payload.user) {
         setLogin("");
@@ -129,14 +128,6 @@ function LoginScreen() {
                   </button>
                 </div>
               </div>
-
-              {/* {error && (
-                <div className="mt-4 text-center text-red-500">
-                  {error === "Request failed with status code 400"
-                    ? "Username/Email and password are required"
-                    : error }
-                </div>
-              )} */}
             </form>
 
             <p className="mt-2 text-center text-base">

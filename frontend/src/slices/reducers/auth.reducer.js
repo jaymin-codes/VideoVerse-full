@@ -6,7 +6,7 @@ const userReducer = createSlice({
 
   initialState: { //states of the slice
     loading: false,
-    user: null,
+    user: JSON.parse(localStorage.getItem("user")) || null,
     error: null,
   },
 
@@ -45,7 +45,7 @@ const userReducer = createSlice({
       .addCase(logoutUser.rejected, (state,action) => {
         state.loading = false,
         state.user = null,
-        state.error = action.error?.message
+        state.error = action.payload
       })
 
       // REGISTER USER
@@ -62,7 +62,7 @@ const userReducer = createSlice({
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.user = null;
-        state.error = action.error;
+        state.error = action.payload;
       })
   },
 });
