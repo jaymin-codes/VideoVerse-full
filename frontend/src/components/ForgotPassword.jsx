@@ -18,7 +18,7 @@ const ForgotPassword = ({ isVisible, onClose }) => {
       const response = await axios.post(`${USER_URL}/forgot-password`, {
         email,
       });
-      console.log(response.data);
+      // console.log(response.data);
       if (response.data === "Email not registered") {
         toast.error("Email not registered");
       } else {

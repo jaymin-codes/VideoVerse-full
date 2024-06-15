@@ -81,11 +81,11 @@ function RegisterScreen() {
         <Loader />
       ) : (
         <div className="flex md:flex-row flex-col md:space-x-5 p-2 h-screen">
-          <div className="md:w-1/2 flex items-center justify-center">
+          <div className="md:w-1/2 mt-16 md:m-0 flex items-center justify-center">
             <img src={Logo} alt="logo" />
           </div>
 
-          <div className="md:w-1/2 p-4 pt-8 md:overflow-y-auto scrollbar-hide">
+          <div className="md:w-1/2 mb-10 mt-5 md:mt-[80px] p-4 md:overflow-y-auto scrollbar-hide">
             <h2 className="text-center text-2xl font-bold">
               Sign up to create account
             </h2>

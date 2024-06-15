@@ -8,82 +8,69 @@ import { FaUserFriends } from "react-icons/fa";
 
 function SideBar() {
   return (
-    <div className="fixed sm:hidden h-screen w-[20%] flex-col bg-[#2d2d2d] hidden md:flex">
-      <div className="">
-        <ul className="mt-6 space-y-4">
-
-          <li className="flex items-center mx-2 rounded-lg px-4 py-2 bg-teal-600 transition hover:font-semibold hover:bg-teal-500/60">
-            <Link
-              href="#"
-              className="relative w-full ml-8 text-xl tracking-wide font-medium"
-            >
-              Home
+    <div className="fixed h-screen w-[18%] sm:w-[20%] bg-[#2d2d2d] pt-16">
+      <div className="relative">
+        <ul className="mt-6 space-y-4 ml-[5px] sm:ml-0">
+          <li className="mx-1 sm:mx-2 p-2 rounded-lg bg-teal-600 transition hover:bg-teal-500/60">
+            <Link to="/" className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 sm:gap-4">
+              <div className="text-3xl sm:text-2xl">
+                <IoMdHome />
+              </div>
+              <div className="hidden sm:inline text-xl">
+                <span>Home</span>
+              </div>
             </Link>
-            <div className="absolute text-2xl">
-              <IoMdHome />
-            </div>
           </li>
-
-          <li className="flex items-center mx-2 rounded-lg px-4 py-2 bg-teal-600 transition hover:font-semibold hover:bg-teal-500/60">
-            <Link
-              href="#"
-              className="relative w-full ml-8 text-xl tracking-wide font-medium"
-            >
-              Liked Videos
+          <li className="mx-1 sm:mx-2 p-2 rounded-lg bg-teal-600 transition hover:bg-teal-500/60">
+            <Link to="" className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 sm:gap-4">
+              <div className="text-3xl sm:text-2xl">
+                <AiFillLike />
+              </div>
+              <div className="hidden sm:inline text-xl">
+                <span>Liked Videos</span>
+              </div>
             </Link>
-            <div className="absolute text-2xl">
-              <AiFillLike />
-            </div>
           </li>
-
-          <li className="flex items-center mx-2 rounded-lg px-4 py-2 bg-teal-600 transition hover:font-semibold hover:bg-teal-500/60">
-            <Link
-              href="#"
-              className="relative w-full ml-8 text-xl tracking-wide font-medium"
-            >
-              History
+          <li className="mx-1 sm:mx-2 p-2 rounded-lg bg-teal-600 transition hover:bg-teal-500/60">
+            <Link to="" className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 sm:gap-4">
+              <div className="text-3xl sm:text-2xl">
+                <MdHistory />
+              </div>
+              <div className="hidden sm:inline text-xl">
+                <span>History</span>
+              </div>
             </Link>
-            <div className="absolute text-2xl">
-              <MdHistory />
-            </div>
           </li>
-          
-          <li className="flex items-center mx-2 rounded-lg px-4 py-2 bg-teal-600 transition hover:font-semibold hover:bg-teal-500/60">
-            <Link
-              href="#"
-              className="relative w-full ml-8 text-xl tracking-wide font-medium"
-            >
-             Collections
+          <li className="mx-1 sm:mx-2 p-2 rounded-lg bg-teal-600 transition hover:bg-teal-500/60">
+            <Link to="" className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 sm:gap-4">
+              <div className="text-3xl sm:text-2xl">
+                <BsCollectionPlayFill />
+              </div>
+              <div className="hidden sm:inline text-xl">
+                <span>Collections</span>
+              </div>
             </Link>
-            <div className="absolute text-2xl">
-              <BsCollectionPlayFill />
-            </div>
           </li>
-          
-          <li className="flex items-center mx-2 rounded-lg px-4 py-2 bg-teal-600 transition hover:font-semibold hover:bg-teal-500/60">
-            <Link
-              href="#"
-              className="relative w-full ml-8 text-xl tracking-wide font-medium"
-            >
-              My Content
+          <li className="mx-1 sm:mx-2 p-2 rounded-lg bg-teal-600 transition hover:bg-teal-500/60">
+            <Link to="" className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 sm:gap-4">
+              <div className="text-3xl sm:text-2xl">
+                <IoMdVideocam />
+              </div>
+              <div className="hidden sm:inline text-xl">
+                <span>My Content</span>
+              </div>
             </Link>
-            <div className="absolute text-2xl">
-              <IoMdVideocam />
-            </div>
           </li>
-          
-          <li className="flex items-center mx-2 rounded-lg px-4 py-2 bg-teal-600 transition hover:font-semibold hover:bg-teal-500/60">
-            <Link
-              href="#"
-              className="relative w-full ml-8 text-xl tracking-wide font-medium"
-            >
-              Subscribers
+          <li className="mx-1 sm:mx-2 p-2 rounded-lg bg-teal-600 transition hover:bg-teal-500/60">
+            <Link to="" className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 sm:gap-4">
+              <div className="text-3xl sm:text-2xl">
+                <FaUserFriends />
+              </div>
+              <div className="hidden sm:inline text-xl">
+                <span>Subscribers</span>
+              </div>
             </Link>
-            <div className="absolute text-2xl">
-              <FaUserFriends />
-            </div>
           </li>
-
         </ul>
       </div>
     </div>

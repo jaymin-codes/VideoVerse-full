@@ -45,8 +45,8 @@ function NavbarIn() {
   };
 
   return (
-    <header className="bg-[#2d2d2d]">
-      <div className="mx-auto flex h-16 max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
+    <header className="fixed top-0 w-full z-50 bg-[#2d2d2d]">
+      <div className="mx-auto flex h-16 max-w-screen-xl items-center gap-8 px-3 sm:px-6 lg:px-8">
         <Link className="block w-[130px] md:w-[150px] p-1" to="/">
           <span className="sr-only">Home</span>
           <img src={logo} alt="logo" />

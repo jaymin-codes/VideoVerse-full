@@ -64,7 +64,7 @@ function LoginScreen() {
       {loading ? (
         <Loader />
       ) : (
-        <div className="flex items-center justify-center my-14">
+        <div className="flex items-center justify-center mb-10 md:mt-[80px] mt-[120px]">
           <div className="md:w-1/3">
             <div className="mb-2 flex justify-center">
               <img src={Logo} alt="videoverse" className="h-[130px]" />
