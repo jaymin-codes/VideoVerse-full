@@ -1,5 +1,5 @@
 import Logo from "../assets/logo.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast, Toaster } from "react-hot-toast";
 import { useState } from "react";
@@ -9,80 +9,64 @@ import RegisterSuccessPopUp from "../components/RegisterSuccessPopUp";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import Loader from "../components/Loader.jsx";
 import NavbarOt from "../components/NavbarOt.jsx";
+import handleImageUpload from "../utilities/imageUpoload.js";
 
 function RegisterScreen() {
   //registration states
-  const [registerForm, setRegisterForm] = useState({
-    fullName: "",
-    email: "",
-    userName: "",
-    password: "",
-    avatar: "",
-    coverImage: "",
-  });
-
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [coverImage, setCoverImage] = useState("");
   //redux
   const { loading, error } = useSelector((state) => state.user);
-
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   //for avatar and cover image preview
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [coverPreview, setCoverPreview] = useState(null);
+
   const [showPass, setShowPass] = useState(false);
+  const toggleShowPass = () => {
+    setShowPass(!showPass);
+  };
 
   const [isModalVisible, setModalVisible] = useState(false);
 
-  const handleImageChange = (e, setImagePreview) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-      setRegisterForm({
-        ...registerForm,
-        [e.target.name]: file,
-      });
-    } else {
-      setImagePreview(null);
-      setRegisterForm({
-        ...registerForm,
-        [e.target.name]: "",
-      });
-    }
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setRegisterForm({
-      ...registerForm,
-      [name]: value,
-    });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const userData = new FormData();
-    for (const key in registerForm) {
-      userData.append(key, registerForm[key]);
+    try {
+      let userData = {
+        fullName: fullName,
+        email: email,
+        userName: userName,
+        avatar: avatar,
+        coverImage: coverImage,
+        password: password,
+      };
+
+      const resultAction = await dispatch(registerUser(userData));
+      const { payload, error } = resultAction;
+
+      if (payload) {
+        toast.success("Registration Successfull", { duration: 3000 });
+        setModalVisible(true);
+      }
+      
+      if (error) {
+        if (payload.status === 409) {
+          toast.error(
+            "Username or email already registered. Please choose another."
+          );
+        } else {
+          toast.error("Failed to register user. Please try again.");
+        }
+      }
+    } catch (err) {
+      console.error("Registration error:", err);
+      toast.error("Something went wrong while. Try again!");
     }
-
-    const resultAction = await dispatch(registerUser(userData));
-
-    if (registerUser.fulfilled.match(resultAction)) {
-      toast.success("Registration Successfull", { duration: 3000 });
-      setModalVisible(true);
-    } else if (registerUser.rejected.match(resultAction)) {
-      toast.error("Username or email already exists");
-      console.error("Error registering user: ", resultAction.error.message);
-    }
-  };
-
-  const toggleShowPass = () => {
-    setShowPass(!showPass);
   };
 
   return (
@@ -143,8 +127,8 @@ function RegisterScreen() {
                       placeholder="Full Name"
                       id="fullName"
                       name="fullName"
-                      value={registerForm.fullName}
-                      onChange={handleChange}
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
                       required
                     />
                   </div>
@@ -161,8 +145,8 @@ function RegisterScreen() {
                       placeholder="Email"
                       id="email"
                       name="email"
-                      value={registerForm.email}
-                      onChange={handleChange}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                     ></input>
                   </div>
@@ -179,8 +163,8 @@ function RegisterScreen() {
                       placeholder="Username"
                       id="userName"
                       name="userName"
-                      value={registerForm.userName}
-                      onChange={handleChange}
+                      value={userName}
+                      onChange={(e) => setUserName(e.target.value)}
                       required
                     ></input>
                   </div>
@@ -201,7 +185,9 @@ function RegisterScreen() {
                         id="avatarImage"
                         name="avatar"
                         accept="image/*"
-                        onChange={(e) => handleImageChange(e, setAvatarPreview)}
+                        onChange={(e) =>
+                          handleImageUpload(e, setAvatar, setAvatarPreview)
+                        }
                         required
                       />
                     </div>
@@ -229,7 +215,9 @@ function RegisterScreen() {
                         id="coverImage"
                         name="coverImage"
                         accept="image/*"
-                        onChange={(e) => handleImageChange(e, setCoverPreview)}
+                        onChange={(e) =>
+                          handleImageUpload(e, setCoverImage, setCoverPreview)
+                        }
                       />
                     </div>
                     <div className="w-1/2 text-right">
@@ -257,8 +245,8 @@ function RegisterScreen() {
                       placeholder="Password"
                       id="password"
                       name="password"
-                      value={registerForm.password}
-                      onChange={handleChange}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                     ></input>
                     <div

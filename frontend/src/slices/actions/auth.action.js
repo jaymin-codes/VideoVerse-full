@@ -23,6 +23,32 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const registerUser = createAsyncThunk(
+  "user/registerUser",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${USER_URL}/register`, userData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      const registeredUserData = response.data.data;
+      console.log(response.data.message);
+      // localStorage.setItem("user", JSON.stringify(registeredUserData));
+      return registeredUserData;
+    } catch (error) {
+      const errorMessage = {
+        message: error.message,
+        statusText: error.response.statusText,
+        data: error.response.data,
+        status: error.response.status
+      }; // payload of rejected action
+      console.log("Registration Error", errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
 export const logoutUser = createAsyncThunk(
   "user/logoutUser",
   async (_, { rejectWithValue }) => {
@@ -42,27 +68,3 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
-export const registerUser = createAsyncThunk(
-  "user/registerUser",
-  async (userData, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(`${USER_URL}/register`, userData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      const userData = response.data.data;
-      console.log(response.data.message);
-      localStorage.setItem("user", JSON.stringify(userData));
-      return userData;
-    } catch (error) {
-      const errorMessage = {
-        message: error.message,
-        // statusText: error.response.statusText,
-        data: error.response.data,
-      };
-      console.log("Registration Error", errorMessage);
-      return rejectWithValue(errorMessage);
-    }
-  }
-);
