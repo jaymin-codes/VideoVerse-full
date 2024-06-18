@@ -33,15 +33,19 @@ function ProfileScreen() {
             />
           </div>
 
-          <div className="absolute top-0 sm:w-[120px] w-[80px] sm:mt-[180px] sm:ml-[20px] mt-[105px] ml-[10px]">
+          <div className="flex absolute top-0 sm:w-[120px] w-[80px] sm:mt-[180px] sm:ml-[20px] mt-[105px] ml-[10px]">
             <img
               src={data.avatar}
               alt="Avatar Image"
               className="w-full h-full object-center rounded-lg"
             />
+            <div className="sm:mt-[70px] mt-[45px] ml-2 text-gray-300">
+              <span className="text-base text-nowrap">@{data.userName}</span>
+              <span className="text-base text-nowrap block">{data.fullName}</span>
+            </div>
           </div>
 
-          <div className="flex gap-4 sm:mt-16 mt-14">
+          <div className="flex gap-4 mt-[80px]">
             <button
               className={`rounded-lg w-1/3 md:text-xl sm:p-2 text-sm px-2 
                  ${activeTab === "Profile" ? "bg-[#4d4d4d] border-b-[3px] border-teal-500 font-extrabold" : ""}`}

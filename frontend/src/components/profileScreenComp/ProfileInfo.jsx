@@ -1,43 +1,65 @@
-import {useState} from "react";
+import { useState } from "react";
 import Loader from "../Loader.jsx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
+import toast, { Toaster } from "react-hot-toast";
+import { updateUserInfo } from "../../slices/actions/user.action.js";
 
 function ProfileInfo() {
-
-//redux
+  //redux
+  const dispatch = useDispatch();
   const { user, loading } = useSelector((state) => state.user);
   const data = user.user;
 
   const [fullName, setFullName] = useState(data.fullName);
   const [email, setEmail] = useState(data.email);
 
-  
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       let updatedData = {
         fullName: fullName,
-        email: email
+        email: email,
+      };
+
+      const resultAction = await dispatch(updateUserInfo(updatedData));
+      const { payload, error } = resultAction;
+
+      if (payload) {
+        const oldUserData = JSON.parse(localStorage.getItem("user"));
+        oldUserData.user.fullName = payload.fullName;
+        oldUserData.user.email = payload.email;
+        localStorage.setItem("user", JSON.stringify(oldUserData));
+        window.location.reload();
+        console.log("Profile updated successfully");
+        toast.success("Profile updated successfully");
       }
 
-      console.log(updatedData);
-    } catch (error) {
-      
+      if (error) {
+        toast.error("Error while updating user details", error);
+      }
+    } catch (err) {
+      console.error("Update user error:", err);
+      toast.error("Something went wrong with the updation");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col items-center mt-4 mb-6">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col items-center mt-4 mb-6"
+    >
+      <Toaster />
       {loading ? (
         <Loader />
       ) : (
         <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.8 }} className="sm:w-1/2 space-y-4 w-full">
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          className="sm:w-1/2 space-y-4 w-full"
+        >
           <div className="space-y-1">
             <label
               htmlFor="fullName"

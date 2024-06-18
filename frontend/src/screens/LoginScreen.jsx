@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import { motion } from "framer-motion";
@@ -17,10 +17,15 @@ function LoginScreen() {
   const [isModalVisible, setModalVisible] = useState(false);
 
   //redux state
-  const { loading, error } = useSelector((state) => state.user);
-
+  const { loading, user, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  
   const navigate = useNavigate();
+  useEffect(() => {
+    if (user && user.user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

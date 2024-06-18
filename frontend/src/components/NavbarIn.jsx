@@ -5,7 +5,7 @@ import { IoSearchSharp } from "react-icons/io5";
 import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
 import { FaAngleDown, FaRegUserCircle } from "react-icons/fa";
-import { FiLogOut } from "react-icons/fi";
+import { BiLogOut, BiLogIn } from "react-icons/bi";
 import { logoutUser } from "../slices/actions/auth.action";
 
 function NavbarIn() {
@@ -16,7 +16,7 @@ function NavbarIn() {
   const navigate = useNavigate();
 
   //redux state
-  const { loading, user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
 
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -81,55 +81,92 @@ function NavbarIn() {
           </button>
 
           <div className="flex items-center gap-4 md:pr-0 pr-2">
-            <div className="relative flex gap-5 w-10 items-center">
-              <img
-                src={user.user.avatar}
-                alt="user-avatar"
-                onClick={handleAvatarClick}
-                className="cursor-pointer"
-              />
+            {user && user.user ? (
+              <div className="relative flex gap-5 w-10 items-center">
+                <img
+                  src={user.user.avatar}
+                  alt="user-avatar"
+                  onClick={handleAvatarClick}
+                  className="cursor-pointer"
+                />
+                <div
+                  className="absolute ml-10 pt-1 text-base cursor-pointer"
+                  onClick={handleAvatarClick}
+                >
+                  <FaAngleDown />
+                </div>
+                {showDropdown && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="absolute right-0 mt-[160px] w-48 bg-[#2c2c2c]  rounded-lg border-2"
+                  >
+                    <ul className="py-1 text-[14px] md:text-[16px]">
+                      <li
+                        className="relative px-2 flex items-center cursor-pointer"
+                        onClick={() => navigate("/profile")}
+                      >
+                        <div className="absolute text-xl text-teal-500">
+                          <FaRegUserCircle />
+                        </div>
+                        <button className="w-full pl-[30px] py-2 text-left border-b">
+                          Profile
+                        </button>
+                      </li>
+
+                      <li
+                        className="relative px-2 flex items-center cursor-pointer"
+                        onClick={() => {
+                          dispatch(logoutUser());
+                        }}
+                      >
+                        <div className="absolute text-xl text-teal-500">
+                          <BiLogOut />
+                        </div>
+                        <button className="w-full pl-[30px] py-2 text-left ">
+                          Logout
+                        </button>
+                      </li>
+                    </ul>
+                  </motion.div>
+                )}
+              </div>
+            ) : (
+              // USER NOT LOGGED IN
               <div
-                className="absolute ml-10 pt-1 text-base cursor-pointer"
+                className="relative flex gap-5 w-10 items-center cursor-pointer"
                 onClick={handleAvatarClick}
               >
-                <FaAngleDown />
-              </div>
-              {showDropdown && (
-                <motion.div
-                  initial={{ opacity: 0, y: -30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="absolute right-0 mt-[160px] w-48 bg-[#2c2c2c]  rounded-lg border-2"
-                >
-                  <ul className="py-1 text-[14px] md:text-[16px]">
-                    <li
-                      className="relative px-2 flex items-center cursor-pointer"
-                      onClick={() => navigate("/profile")}
-                    >
-                      <div className="absolute text-xl text-teal-500">
-                        <FaRegUserCircle />
-                      </div>
-                      <button className="w-full pl-[30px] py-2 text-left border-b">
-                        Profile
-                      </button>
-                    </li>
+                <div className="text-2xl">
+                  <FaRegUserCircle />
+                </div>
 
-                    <li
-                      className="relative px-2 flex items-center cursor-pointer"
-                      onClick={() => {
-                        dispatch(logoutUser());
-                      }}
-                    >
-                      <div className="absolute text-xl text-teal-500">
-                        <FiLogOut />
-                      </div>
-                      <button className="w-full pl-[30px] py-2 text-left ">
-                        Logout
-                      </button>
-                    </li>
-                  </ul>
-                </motion.div>
-              )}
-            </div>
+                <div className="absolute ml-[28px] pt-1 text-base">
+                  <FaAngleDown />
+                </div>
+                {showDropdown && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="absolute right-0 mt-[120px] w-48 bg-[#2c2c2c]  rounded-lg border-2"
+                  >
+                    <ul className="py-1 text-[14px] md:text-[16px]">
+                      <li
+                        className="relative px-2 flex items-center cursor-pointer"
+                        onClick={() => navigate("/login")}
+                      >
+                        <div className="absolute text-xl text-teal-500">
+                          <BiLogIn />
+                        </div>
+                        <button className="w-full pl-[30px] py-2 text-left ">
+                          Login
+                        </button>
+                      </li>
+                    </ul>
+                  </motion.div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
